@@ -1,6 +1,7 @@
 # Foundry 
 
 [![Build Status](https://secure.travis-ci.org/jzaleski/foundry.png?branch=master)](http://travis-ci.org/jzaleski/foundry)
+[![Dependency Status](https://gemnasium.com/jzaleski/foundry.png)](https://gemnasium.com/jzaleski/foundry)
 
 An application configuration gem that aims to keep it simple
 
