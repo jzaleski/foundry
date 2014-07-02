@@ -1,6 +1,7 @@
 require 'erb'
 require 'net/http'
 require 'ostruct'
+require 'uri'
 require 'yaml'
 
 require 'foundry/loaders/file'

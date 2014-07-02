@@ -1,6 +1,4 @@
 * Write tests
-* Add support for `https`
-* Add support for URLs requiring authentication
 * Relocate `configuration` method as defined in `foundry.rb`
 * Consider creating a custom object that extends `OpenStruct` to store
   configuration values
