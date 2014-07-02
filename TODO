@@ -1,4 +1,2 @@
 * Write tests
-* Relocate `configuration` method as defined in `foundry.rb`
-* Consider creating a custom object that extends `OpenStruct` to store
-  configuration values
+* Add support for other source-file types (JSON? XML (::shiver::)?)
