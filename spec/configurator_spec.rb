@@ -19,7 +19,7 @@ describe Foundry::Configurator do
   end
 
   it 'will fail-fast if the YAML is invalid' do
-    expect(Foundry::Loaders::File).to receive(:load) { '!!!' }
+    expect(Foundry::Loaders::File).to receive(:load)
     expect { subject.configure(:file_name => '') }.to raise_error
   end
 

@@ -1,2 +1,3 @@
+* Update feature-list in `gemspec`
 * Consider using `Hashie` instead of `OpenStruct`
 * Add support for other source-file types (JSON? XML (::shiver::)?)
