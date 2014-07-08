@@ -16,9 +16,11 @@ Gem::Specification.new do |gem|
 
   Features:
 
-  * Feature #1
-  * Feature #2
-  * Feature #3
+  * Can load YAML from a local-file
+  * Can load YAML from a HTTP/HTTPS endpoint
+  * Supports Basic Authentication for HTTP{,S} endpoints
+  * Supports ERB interpolation
+  * Returns an easy to navigate object-graph
   EOL
   gem.homepage = 'https://github.com/jzaleski/foundry'
   gem.license = 'MIT'
