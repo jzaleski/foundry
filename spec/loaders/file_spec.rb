@@ -10,6 +10,6 @@ describe Foundry::Loaders::File do
   end
 
   it 'will raise an error if the file does not exist' do
-    expect { subject.load('', {}) }.to raise_error(Errno::ENOENT)
+    expect { subject.load('', {}) }.to raise_error
   end
 end

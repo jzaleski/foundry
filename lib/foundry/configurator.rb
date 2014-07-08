@@ -40,7 +40,7 @@ module Foundry
         when Hash
           OpenStruct.new.tap do |ostruct|
             object.each do |key, value|
-              ostruct[key] = ostructify(value)
+              ostruct.public_send("#{key}=", ostructify(value))
             end
           end
         else

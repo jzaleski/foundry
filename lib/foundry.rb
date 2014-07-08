@@ -1,5 +1,6 @@
 require 'erb'
 require 'net/http'
+require 'openssl'
 require 'ostruct'
 require 'uri'
 require 'yaml'
