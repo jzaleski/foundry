@@ -21,7 +21,23 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Document usage
+Loading from a locale-file:
+
+```ruby
+Foundry::Configurator.configure(:file_name => 'path-to-local-file')
+```
+
+Loading from a HTTP/HTTPS endpoint:
+
+```ruby
+Foundry::Configurator.configure(:uri => 'http-or-https-endpoint')
+```
+
+Loading from a HTTP/HTTPS endpoint using "Basic Authentication":
+
+```ruby
+Foundry::Configurator.configure(:uri => 'http-or-https-endpoint', :username => 'basic-auth-username', :password => 'basic-auth-password')
+```
 
 ## Contributing
 
