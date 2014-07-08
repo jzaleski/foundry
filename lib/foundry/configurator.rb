@@ -1,44 +1,52 @@
 module Foundry
   class Configurator
-    def self.configure(opts={})
-      ostructify(
-        yamlify(
-          erbify(
-            if file_name = opts.delete(:file_name)
-              Foundry::Loaders::File.load(file_name, opts)
-            elsif uri = opts.delete(:uri)
-              Foundry::Loaders::Uri.load(uri, opts)
-            end
+    class << self
+      def configure(opts={})
+        ostructify(
+          load_yaml(
+            evaluate_erb(
+              load_by_filename_or_uri(opts)
+            )
           )
         )
-      )
-    end
-
-    private
-
-    def self.erbify(str)
-      ERB.new(str).result
-    end
-
-    def self.ostructify(object)
-      case object
-      when Array
-        object.map do |value|
-          ostructify(value)
-        end
-      when Hash
-        OpenStruct.new.tap do |memo|
-          object.each do |key, value|
-            memo[key] = ostructify(value)
-          end
-        end
-      else
-        object
       end
-    end
 
-    def self.yamlify(str)
-      YAML.load(str)
+      private
+
+      def evaluate_erb(str)
+        ERB.new(str).result
+      end
+
+      def load_by_filename_or_uri(opts)
+        if file_name = opts.delete(:file_name)
+          Foundry::Loaders::File.load(file_name, opts)
+        elsif uri = opts.delete(:uri)
+          Foundry::Loaders::Uri.load(uri, opts)
+        else
+          raise NotImplementedError
+        end
+      end
+
+      def load_yaml(str)
+        YAML.load(str)
+      end
+
+      def ostructify(object)
+        case object
+        when Array
+          object.map do |value|
+            ostructify(value)
+          end
+        when Hash
+          OpenStruct.new.tap do |ostruct|
+            object.each do |key, value|
+              ostruct[key] = ostructify(value)
+            end
+          end
+        else
+          object
+        end
+      end
     end
   end
 end
