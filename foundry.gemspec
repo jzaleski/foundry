@@ -8,20 +8,12 @@ Gem::Specification.new do |gem|
   gem.version = Foundry::VERSION
   gem.authors = ['Jonathan W. Zaleski']
   gem.email = ['JonathanZaleski@gmail.com']
-  gem.summary = %{An application configuration gem that aims to keep it simple}
-  gem.description = <<-EOL
+  gem.summary = 'An application configuration gem that aims to keep it simple'
+  gem.description = <<-DESCRIPTION
   Let's face it, there are a number of problems when application/environment
   configuration logic is too tightly coupled with the configuration-data itself.
   This gem aims to keep it simple and fully decouple the two concerns.
-
-  Features:
-
-  * Can load YAML from a local-file
-  * Can load YAML from a HTTP/HTTPS endpoint
-  * Supports Basic Authentication for HTTP{,S} endpoints
-  * Supports ERB interpolation
-  * Returns an easy to navigate object-graph
-  EOL
+  DESCRIPTION
   gem.homepage = 'https://github.com/jzaleski/foundry'
   gem.license = 'MIT'
 
@@ -29,6 +21,8 @@ Gem::Specification.new do |gem|
   gem.executables = gem.files.grep(%r{^bin/}) { |file| File.basename(file) }
   gem.test_files = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
+
+  gem.add_dependency 'hashie', '~> 3.1'
 
   gem.add_development_dependency 'bundler', '~> 1.6'
   gem.add_development_dependency 'pry', '~> 0.10'

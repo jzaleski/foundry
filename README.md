@@ -5,6 +5,18 @@
 
 An application configuration gem that aims to keep it simple
 
+Let's face it, there are a number of problems when application/environment
+configuration logic is too tightly coupled with the configuration-data itself.
+This gem aims to keep it simple and fully decouple the two concerns.
+
+Features:
+
+* Can load YAML from a local-file
+* Can load YAML from a HTTP/HTTPS endpoint
+* Supports Basic Authentication for HTTP{,S} endpoints
+* Supports ERB interpolation
+* Returns an easy to navigate object-graph
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -24,23 +36,40 @@ Or install it yourself as:
 Loading from a local-file:
 
 ```ruby
-Foundry::Configurator.configure(:file_name => 'path-to-local-file')
+config = Foundry::Configurator.configure(:file_name => 'path-to-local-file')
 ```
 
 Loading from a HTTP/HTTPS endpoint:
 
 ```ruby
-Foundry::Configurator.configure(:uri => 'http-or-https-endpoint')
+config = Foundry::Configurator.configure(:uri => 'http-or-https-endpoint')
 ```
 
 Loading from a HTTP/HTTPS endpoint using "Basic Authentication":
 
 ```ruby
-Foundry::Configurator.configure(
+config = Foundry::Configurator.configure(
   :uri => 'http-or-https-endpoint',
   :username => 'basic-auth-username',
   :password => 'basic-auth-password'
 )
+```
+
+Using the "config" object (defined above):
+
+```ruby
+# The examples below assume that the following YAML was loaded by a call to
+# "Foundry::Configurator.configure" and into a variable named "config"
+#
+# ---
+# some_key:
+#   some_nested_key: value
+
+# Fetch a value using dot-notation
+value = config.some_key.some_nested_key
+
+# Fetch a value by key
+value = config['some_key']['some_nested_key']
 ```
 
 ## Contributing

@@ -1,7 +1,7 @@
 require 'erb'
+require 'hashie'
 require 'net/http'
 require 'openssl'
-require 'ostruct'
 require 'uri'
 require 'yaml'
 

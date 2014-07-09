@@ -2,7 +2,7 @@ module Foundry
   class Configurator
     class << self
       def configure(opts={})
-        ostructify(
+        mashify(
           load_yaml(
             evaluate_erb(
               load_by_filename_or_uri(opts)
@@ -31,16 +31,16 @@ module Foundry
         YAML.load(str)
       end
 
-      def ostructify(object)
+      def mashify(object)
         case object
         when Array
           object.map do |value|
-            ostructify(value)
+            mashify(value)
           end
         when Hash
-          OpenStruct.new.tap do |ostruct|
+          Hashie::Mash.new.tap do |mash|
             object.each do |key, value|
-              ostruct.public_send("#{key}=", ostructify(value))
+              mash[key] = mashify(value)
             end
           end
         else
