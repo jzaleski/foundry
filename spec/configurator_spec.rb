@@ -42,8 +42,8 @@ describe Foundry::Configurator do
     YAML
     }
     expect(subject.configure(:file_name => '')).to eq(
-      Hashie::Mash.new(
-        'root' => Hashie::Mash.new(
+      Foundry::HashStruct.new(
+        'root' => Foundry::HashStruct.new(
           'erb' => 6,
           'float' => 123.0,
           'integer' =>  42,

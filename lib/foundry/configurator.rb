@@ -2,7 +2,7 @@ module Foundry
   class Configurator
     class << self
       def configure(opts={})
-        mashify(
+        structify(
           load_yaml(
             evaluate_erb(
               load_by_filename_or_uri(opts)
@@ -31,16 +31,16 @@ module Foundry
         YAML.load(str)
       end
 
-      def mashify(object)
+      def structify(object)
         case object
         when Array
           object.map do |value|
-            mashify(value)
+            structify(value)
           end
         when Hash
-          Hashie::Mash.new.tap do |mash|
+          Foundry::HashStruct.new.tap do |mash|
             object.each do |key, value|
-              mash[key] = mashify(value)
+              mash[key] = structify(value)
             end
           end
         else
