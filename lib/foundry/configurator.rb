@@ -38,9 +38,9 @@ module Foundry
             structify(value)
           end
         when Hash
-          Foundry::HashStruct.new.tap do |mash|
+          Foundry::HashStruct.new.tap do |hash_struct|
             object.each do |key, value|
-              mash[key] = structify(value)
+              hash_struct[key] = structify(value)
             end
           end
         else
