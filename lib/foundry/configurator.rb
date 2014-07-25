@@ -38,9 +38,9 @@ module Foundry
             structify(value)
           end
         when Hash
-          OpenHash.new.tap do |open_hash|
+          OpenStruct.new.tap do |open_struct|
             object.each do |key, value|
-              open_hash[key] = structify(value)
+              open_struct[key] = structify(value)
             end
           end
         else

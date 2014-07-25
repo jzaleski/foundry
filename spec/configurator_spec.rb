@@ -42,8 +42,8 @@ describe Foundry::Configurator do
     YAML
     }
     expect(subject.configure(:file_name => '')).to eq(
-      OpenHash.new(
-        'root' => OpenHash.new(
+      OpenStruct.new(
+        'root' => OpenStruct.new(
           'erb' => 6,
           'float' => 123.0,
           'integer' =>  42,
