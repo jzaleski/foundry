@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'foundry/loaders/uri'
 
 describe Foundry::Loaders::Uri do
   subject { Foundry::Loaders::Uri }

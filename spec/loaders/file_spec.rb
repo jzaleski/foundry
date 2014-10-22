@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'foundry/loaders/file'
 
 describe Foundry::Loaders::File do
   subject { Foundry::Loaders::File }

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'foundry/configurator'
 
 describe Foundry::Configurator do
   subject { Foundry::Configurator }
