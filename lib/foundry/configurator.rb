@@ -28,20 +28,20 @@ module Foundry
       ERB.new(str).result
     end
 
-    def file_name
-      opts.fetch(:file_name)
-    end
-
     def load_yaml
       source.load(
         config_root,
-        file_name,
+        relative_path,
         opts
       )
     end
 
     def parse_yaml(str)
       YAML.load(str)
+    end
+
+    def relative_path
+      opts.fetch(:relative_path)
     end
 
     def source

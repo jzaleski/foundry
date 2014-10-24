@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Foundry::Configurator do
   REQUIRED_OPTS = [
     :config_root,
-    :file_name,
+    :relative_path,
     :source_type,
   ]
 

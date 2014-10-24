@@ -36,20 +36,30 @@ Or install it yourself as:
 Loading from a local-file:
 
 ```ruby
-config = Foundry::Configurator.configure(:file_name => 'path-to-local-file')
+config = Foundry::Configurator.configure(
+  :config_root => 'local-root-path',
+  :relative_path => 'relative-path-to-file',
+  :source_type => Foundry::Sources::File
+)
 ```
 
 Loading from a HTTP/HTTPS endpoint:
 
 ```ruby
-config = Foundry::Configurator.configure(:uri => 'http-or-https-endpoint')
+config = Foundry::Configurator.configure(
+  :config_root => 'http-or-https-root-url',
+  :relative_path => 'relative-path-to-file',
+  :source_type => Foundry::Sources::URI
+)
 ```
 
 Loading from a HTTP/HTTPS endpoint using "Basic Authentication":
 
 ```ruby
 config = Foundry::Configurator.configure(
-  :uri => 'http-or-https-endpoint',
+  :config_root => 'http-or-https-root-url',
+  :relative_path => 'relative-path-to-file',
+  :source_type => Foundry::Sources::URI,
   :username => 'basic-auth-username',
   :password => 'basic-auth-password'
 )
