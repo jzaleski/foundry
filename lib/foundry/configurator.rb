@@ -1,52 +1,79 @@
 module Foundry
   class Configurator
-    class << self
-      def configure(opts={})
+    def self.configure(opts)
+      Configurator.new.configure(opts)
+    end
+
+    def configure(opts)
+      with_opts(opts) do
         structify(
-          load_yaml(
+          parse_yaml(
             evaluate_erb(
-              load_by_filename_or_uri(opts)
+              load_yaml
             )
           )
         )
       end
+    end
 
-      private
+    private
 
-      def evaluate_erb(str)
-        ERB.new(str).result
-      end
+    attr_reader :opts
 
-      def load_by_filename_or_uri(opts)
-        if file_name = opts.delete(:file_name)
-          Foundry::Loaders::File.load(file_name, opts)
-        elsif uri = opts.delete(:uri)
-          Foundry::Loaders::Uri.load(uri, opts)
-        else
-          raise NotImplementedError
+    def config_root
+      opts.fetch(:config_root)
+    end
+
+    def evaluate_erb(str)
+      ERB.new(str).result
+    end
+
+    def file_name
+      opts.fetch(:file_name)
+    end
+
+    def load_yaml
+      source.load(
+        config_root,
+        file_name,
+        opts
+      )
+    end
+
+    def parse_yaml(str)
+      YAML.load(str)
+    end
+
+    def source
+      source_type.new
+    end
+
+    def source_type
+      opts.fetch(:source_type)
+    end
+
+    def structify(object)
+      case object
+      when Array
+        object.map do |value|
+          structify(value)
         end
-      end
-
-      def load_yaml(str)
-        YAML.load(str)
-      end
-
-      def structify(object)
-        case object
-        when Array
-          object.map do |value|
-            structify(value)
+      when Hash
+        OpenStruct.new.tap do |open_struct|
+          object.each do |key, value|
+            open_struct.send("#{key}=", structify(value))
           end
-        when Hash
-          OpenStruct.new.tap do |open_struct|
-            object.each do |key, value|
-              open_struct.send("#{key}=", structify(value))
-            end
-          end
-        else
-          object
         end
+      else
+        object
       end
+    end
+
+    def with_opts(opts)
+      @opts = opts
+      yield
+    ensure
+      @opts = nil
     end
   end
 end

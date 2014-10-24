@@ -1,6 +1,16 @@
 require 'rspec'
+require 'webmock/rspec'
 require File.expand_path('../../lib/foundry.rb', __FILE__)
 
-RSpec.configure do |config|
-  config.color_enabled = true if config.respond_to?(:color_enabled)
+class Hash
+  def without(*keys)
+    dup.without!(*keys)
+  end
+
+  def without!(*keys)
+    self.reject! { |key, _| keys.include?(key) }
+  end
 end
+
+SOURCES_MODULE = Foundry::Sources
+AVAILABLE_SOURCE_TYPES = SOURCES_MODULE.constants.map { |c| SOURCES_MODULE::const_get(c) }

@@ -6,6 +6,6 @@ require 'uri'
 require 'yaml'
 
 require 'foundry/configurator'
-require 'foundry/loaders/file'
-require 'foundry/loaders/uri'
+require 'foundry/sources/file'
+require 'foundry/sources/uri'
 require 'foundry/version'
