@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Foundry::Configurator do
   REQUIRED_OPTS = [
-    :config_root,
+    :root_path,
     :relative_path,
     :source_type,
   ]

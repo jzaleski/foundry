@@ -37,7 +37,7 @@ Loading from a local-file:
 
 ```ruby
 config = Foundry::Configurator.configure(
-  :config_root => 'local-root-path',
+  :root_path => 'local-root-path',
   :relative_path => 'relative-path-to-file',
   :source_type => Foundry::Sources::File
 )
@@ -47,7 +47,7 @@ Loading from a HTTP/HTTPS endpoint:
 
 ```ruby
 config = Foundry::Configurator.configure(
-  :config_root => 'http-or-https-root-url',
+  :root_path => 'http-or-https-root-url',
   :relative_path => 'relative-path-to-file',
   :source_type => Foundry::Sources::URI
 )
@@ -57,7 +57,7 @@ Loading from a HTTP/HTTPS endpoint using "Basic Authentication":
 
 ```ruby
 config = Foundry::Configurator.configure(
-  :config_root => 'http-or-https-root-url',
+  :root_path => 'http-or-https-root-url',
   :relative_path => 'relative-path-to-file',
   :source_type => Foundry::Sources::URI,
   :username => 'basic-auth-username',

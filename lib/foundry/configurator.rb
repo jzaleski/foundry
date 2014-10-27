@@ -20,17 +20,13 @@ module Foundry
 
     attr_reader :opts
 
-    def config_root
-      opts.fetch(:config_root)
-    end
-
     def evaluate_erb(str)
       ERB.new(str).result
     end
 
     def load_yaml
       source.load(
-        config_root,
+        root_path,
         relative_path,
         opts
       )
@@ -42,6 +38,10 @@ module Foundry
 
     def relative_path
       opts.fetch(:relative_path)
+    end
+
+    def root_path
+      opts.fetch(:root_path)
     end
 
     def source

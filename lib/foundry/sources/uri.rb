@@ -1,8 +1,8 @@
 module Foundry
   module Sources
     class URI
-      def load(config_root, relative_path, opts)
-        uri = ::URI.join(config_root, relative_path)
+      def load(root_path, relative_path, opts)
+        uri = ::URI.join(root_path, relative_path)
         client = Net::HTTP.new(uri.host, uri.port)
         if uri.scheme == 'https'
           client.use_ssl = true
