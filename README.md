@@ -65,21 +65,65 @@ config = Foundry::Configurator.configure(
 )
 ```
 
-Using the "config" object (defined above):
+Fetching top-level and nested values:
 
 ```ruby
-# The examples below assume that the following YAML was loaded by a call to
-# "Foundry::Configurator.configure" and into a variable named "config"
+# The examples below assume that a file containing the following has already
+# been loaded and processed by a call to `Foundry::Configurator.configure` (into
+# a variable named `config`).
 #
 # ---
-# some_key:
-#   some_nested_key: value
+# value1: value
+# value2:
+#   nested_value1: value
 
-# Fetch a value using dot-notation
-value = config.some_key.some_nested_key
+# Fetching a top-level value using dot-notation
+value1 = config.value1
 
-# Fetch a value by key
-value = config['some_key']['some_nested_key']
+# Fetching a nested value using dot-notation
+nested_value1 = config.value2.nested_value1
+
+# Fetching a top-level value by key
+value1 = config['value1']
+
+# Fetching a nested value by key
+nested_value1 = config['value2']['nested_value1']
+```
+
+Inheritance support:
+
+```ruby
+# The examples below assume that there are two files available, relative to the
+# `root_path`, named "file1.yml" and "file2.yml" (and that "file2.yml" inherits
+# from "file1.yml").
+#
+# The file contents are as follows:
+#
+# === file1.yml ===
+#
+# ---
+# value1: value
+#
+# === file2.yml ===
+#
+# ---
+# value2: value
+# inherit: file1.yml
+#
+# It is also assumed that the files have already been loaded and processed by a
+# call to `Foundry::Configurator.configure` (into a variable named `config`).
+#
+# The result now contains values for both `value1` and `value2` and can be used
+# as follows (it is worth noting that the `inherit` key is removed during the
+# configuration process):
+
+# Fetching `value1` and `value2` using dot-notation
+value1 = config.value1
+value2 = config.value2
+
+# Fetching `value1` and `value2` by key
+value1 = config['value1']
+value2 = config['value2']
 ```
 
 ## Contributing

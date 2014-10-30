@@ -6,13 +6,9 @@ module Foundry
 
     def configure(opts)
       with_opts(opts) do
-        structify(
-          parse_yaml(
-            evaluate_erb(
-              load_yaml
-            )
-          )
-        )
+        transmorgs = transmorgify(opts.fetch(:relative_path))
+        merged = mergify(transmorgs)
+        structify(merged)
       end
     end
 
@@ -20,11 +16,11 @@ module Foundry
 
     attr_reader :opts
 
-    def evaluate_erb(str)
+    def erbify(str)
       ERB.new(str).result
     end
 
-    def load_yaml
+    def loadify(relative_path)
       source.load(
         root_path,
         relative_path,
@@ -32,12 +28,12 @@ module Foundry
       )
     end
 
-    def parse_yaml(str)
-      YAML.load(str)
+    def mergify(transmorgs)
+      transmorgs.reduce({}) { |memo, transmorg| memo.deep_merge(transmorg) }
     end
 
-    def relative_path
-      opts.fetch(:relative_path)
+    def parsify(str)
+      YAML.load(str) || {}
     end
 
     def root_path
@@ -67,6 +63,12 @@ module Foundry
       else
         object
       end
+    end
+
+    def transmorgify(relative_path)
+      parsed = parsify(erbify(loadify(relative_path)))
+      inherit = parsed.delete('inherit')
+      Array(inherit && transmorgify(inherit)) << parsed
     end
 
     def with_opts(opts)

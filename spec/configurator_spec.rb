@@ -8,7 +8,7 @@ describe Foundry::Configurator do
   ]
 
   subject { Foundry::Configurator.new }
-  let(:opts) { REQUIRED_OPTS.reduce({}) { |m, o| m[o] = nil; m } }
+  let(:opts) { REQUIRED_OPTS.reduce({}) { |memo, opt| memo[opt] = nil; memo } }
 
   REQUIRED_OPTS.each do |key|
     it %{must be passed a "#{key}"} do
@@ -16,57 +16,62 @@ describe Foundry::Configurator do
     end
   end
 
-  it 'will attempt to load from a file' do
-    with_file_source do |source|
-      expect(source).to receive(:load) { '' }
-      expect { subject.configure(opts) }.not_to raise_error
-    end
-  end
-
-  it 'will attempt to load from a uri' do
-    with_uri_source do |source|
+  it 'will load from a source' do
+    with_source do |source|
       expect(source).to receive(:load) { '' }
       expect { subject.configure(opts) }.not_to raise_error
     end
   end
 
   it 'will fail-fast if the YAML is invalid' do
-    with_file_source do |source|
+    with_source do |source|
       expect(source).to receive(:load)
       expect { subject.configure(opts) }.to raise_error
     end
   end
 
   it 'will fail-fast if the ERB raises an error' do
-    with_all_sources do |source|
+    with_source do |source|
       expect(source).to receive(:load) { 'foo: <%= 1/0 %>' }
       expect { subject.configure(opts) }.to raise_error
     end
   end
 
-  it 'can parse [nested] YAML/ERB' do
-    with_all_sources do |source|
+  it 'can parse YAML/ERB' do
+    with_source do |source|
       expect(source).to receive(:load) { <<-YAML
-        root:
-          erb: <%= 1 * 2 * 3 %>
-          float: 123.0
-          integer: 42
-          list:
-            - uno
-            - dos
-            - tres
-          string: hello world
+        erb: <%= 1 * 2 * 3 %>
+        float: 123.0
+        integer: 42
+        list:
+          - uno
+          - dos
+          - tres
+        string: hello world
       YAML
       }
       expect(subject.configure(opts)).to eq(
         OpenStruct.new(
-          'root' => OpenStruct.new(
-            'erb' => 6,
-            'float' => 123.0,
-            'integer' =>  42,
-            'list' => %w[uno dos tres],
-            'string' => 'hello world'
-          )
+          'erb' => 6,
+          'float' => 123.0,
+          'integer' =>  42,
+          'list' => %w[uno dos tres],
+          'string' => 'hello world'
+        )
+      )
+    end
+  end
+
+  it 'supports inheritance' do
+    with_source(:exactly => :twice) do |source|
+      expect(source).to receive(:load).and_return(
+        "foo: foo\ninherit: bar",
+        "bar: bar"
+      )
+      expect(subject.configure(opts)).to eq(
+        OpenStruct.new(
+          'foo' => 'foo',
+          'bar' => 'bar'
         )
       )
     end
@@ -74,23 +79,17 @@ describe Foundry::Configurator do
 
   private
 
-  def with_all_sources
-    AVAILABLE_SOURCE_TYPES.each do |source_type|
-      source = source_type.new
-      expect(subject).to receive(:source) { source }
-      yield source
-    end
+  def default_opts
+    {
+      :exactly => :once,
+      :type => Foundry::Sources::File,
+    }
   end
 
-  def with_file_source
-    source = Foundry::Sources::File.new
-    expect(subject).to receive(:source) { source }
-    yield source
-  end
-
-  def with_uri_source
-    source = Foundry::Sources::URI.new
-    expect(subject).to receive(:source) { source }
+  def with_source(opts={})
+    merged_opts = default_opts.merge(opts)
+    source = merged_opts[:type].new
+    expect(subject).to receive(:source).exactly(merged_opts[:exactly]) { source }
     yield source
   end
 end

@@ -5,6 +5,8 @@ require 'ostruct'
 require 'uri'
 require 'yaml'
 
+require 'foundry/refinements/hash'
+
 require 'foundry/configurator'
 require 'foundry/sources/file'
 require 'foundry/sources/uri'
