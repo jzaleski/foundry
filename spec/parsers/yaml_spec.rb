@@ -6,6 +6,6 @@ describe Foundry::Parsers::YAML do
   end
 
   it 'will raise an error if the YAML is unparseable' do
-    expect { subject.parse('*unparseable') }.to raise_error
+    expect { subject.parse(nil) }.to raise_error
   end
 end
