@@ -1,13 +1,7 @@
-require 'erb'
-require 'net/http'
-require 'openssl'
-require 'ostruct'
-require 'uri'
-require 'yaml'
-
-require 'foundry/refinements/hash'
+require 'foundry/parsers'
+require 'foundry/refinements'
+require 'foundry/sources'
+require 'foundry/template_engines'
+require 'foundry/version'
 
 require 'foundry/configurator'
-require 'foundry/sources/file'
-require 'foundry/sources/uri'
-require 'foundry/version'

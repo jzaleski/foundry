@@ -9,6 +9,7 @@ describe Hash do
       :D => nil,
     }
   end
+
   let(:keys) do
     [
       :A,

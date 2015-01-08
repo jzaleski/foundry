@@ -1,3 +1,7 @@
+require 'net/http'
+require 'openssl'
+require 'uri'
+
 module Foundry
   module Sources
     class URI

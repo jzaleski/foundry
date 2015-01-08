@@ -1,0 +1,1 @@
+require 'foundry/refinements/hash'

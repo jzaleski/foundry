@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Foundry::Sources::URI do
-  subject { Foundry::Sources::URI.new }
   let(:domain) { 'foo.bar.com' }
   let(:relative_path) { 'config.yml' }
 

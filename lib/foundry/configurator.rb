@@ -1,24 +1,27 @@
+require 'ostruct'
+
 module Foundry
   class Configurator
     def self.configure(opts)
-      Configurator.new.configure(opts)
+      new.configure(opts)
     end
 
     def configure(opts)
       with_opts(opts) do
-        transmorgs = transmorgify(opts.fetch(:relative_path))
-        merged = mergify(transmorgs)
-        structify(merged)
+        relative_path = opts.fetch(:relative_path)
+        structify(mergify(transmorgify(relative_path)))
       end
     end
 
     private
 
-    attr_reader :opts
+    DEFAULT_OPTS = {
+      :parser_type => Foundry::Parsers::YAML,
+      :source_type => Foundry::Sources::URI,
+      :template_engine_type => Foundry::TemplateEngines::ERB
+    }
 
-    def erbify(str)
-      ERB.new(str).result
-    end
+    attr_reader :opts
 
     def loadify(relative_path)
       source.load(
@@ -32,8 +35,20 @@ module Foundry
       transmorgs.reduce({}) { |memo, transmorg| memo.deep_merge(transmorg) }
     end
 
+    def opts_value_or_default(key)
+      opts.fetch(key, DEFAULT_OPTS.fetch(key))
+    end
+
+    def parser
+      parser_type.new
+    end
+
+    def parser_type
+      opts_value_or_default(:parser_type)
+    end
+
     def parsify(str)
-      YAML.load(str) || {}
+      parser.parse(str) || {}
     end
 
     def root_path
@@ -45,7 +60,7 @@ module Foundry
     end
 
     def source_type
-      opts.fetch(:source_type)
+      opts_value_or_default(:source_type)
     end
 
     def structify(object)
@@ -65,10 +80,22 @@ module Foundry
       end
     end
 
+    def template_engine
+      template_engine_type.new
+    end
+
+    def template_engine_type
+      opts_value_or_default(:template_engine_type)
+    end
+
+    def templatify(str)
+      template_engine.evaluate(str)
+    end
+
     def transmorgify(relative_path)
-      parsed = parsify(erbify(loadify(relative_path)))
-      inherit = parsed.delete('inherit')
-      Array(inherit && transmorgify(inherit)) << parsed
+      parsed = parsify(templatify(loadify(relative_path)))
+      next_relative_path = parsed.delete('inherit')
+      Array(next_relative_path && transmorgify(next_relative_path)) << parsed
     end
 
     def with_opts(opts)
