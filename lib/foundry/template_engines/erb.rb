@@ -1,5 +1,6 @@
 require 'erb'
 
+
 module Foundry
   module TemplateEngines
     class ERB

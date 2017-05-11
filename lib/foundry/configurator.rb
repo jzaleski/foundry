@@ -1,5 +1,6 @@
 require 'ostruct'
 
+
 module Foundry
   class Configurator
     def self.configure(opts)
@@ -9,7 +10,9 @@ module Foundry
     def configure(opts)
       with_opts(opts) do
         relative_path = opts.fetch(:relative_path)
-        structify(mergify(transmorgify(relative_path)))
+        transmorg = transmorgify(relative_path)
+        merged = mergify(transmorg)
+        structify(merged)
       end
     end
 
@@ -18,7 +21,7 @@ module Foundry
     DEFAULT_OPTS = {
       :parser_type => Foundry::Parsers::YAML,
       :source_type => Foundry::Sources::URI,
-      :template_engine_type => Foundry::TemplateEngines::ERB
+      :template_engine_type => Foundry::TemplateEngines::ERB,
     }
 
     attr_reader :opts
@@ -63,20 +66,16 @@ module Foundry
       opts_value_or_default(:source_type)
     end
 
-    def structify(object)
-      case object
+    def structify(value)
+      case value
       when Array
-        object.map do |value|
-          structify(value)
-        end
+        value.map { |item| structify(item) }
       when Hash
-        OpenStruct.new.tap do |open_struct|
-          object.each do |key, value|
-            open_struct.send("#{key}=", structify(value))
-          end
+        OpenStruct.new.tap do |struct|
+          value.each { |item| struct.send("#{item[0]}=", structify(item[1])) }
         end
       else
-        object
+        value
       end
     end
 

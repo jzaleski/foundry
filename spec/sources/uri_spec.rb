@@ -14,7 +14,6 @@ describe Foundry::Sources::URI do
   let(:https_response_body) { 'https_response_body' }
   let(:https_opts) { {} }
 
-  let(:basic_auth_uri) { "http://#{basic_auth_username}:#{basic_auth_password}@#{domain}/#{relative_path}" }
   let(:basic_auth_root_path) { http_root_path }
   let(:basic_auth_response_body) { 'basic_auth_response_body' }
   let(:basic_auth_username) { 'basic_auth_username' }
@@ -49,7 +48,7 @@ describe Foundry::Sources::URI do
   end
 
   it 'can load from a endpoint using basic-auth' do
-    stub_request(:get, basic_auth_uri).to_return(:body => basic_auth_response_body)
+    stub_request(:get, http_uri).to_return(:body => basic_auth_response_body)
 
     expect(
       subject.load(

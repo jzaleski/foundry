@@ -1,5 +1,6 @@
 require 'yaml'
 
+
 module Foundry
   module Parsers
     class YAML

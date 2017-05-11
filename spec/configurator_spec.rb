@@ -1,16 +1,13 @@
 require 'spec_helper'
 
 describe Foundry::Configurator do
-  REQUIRED_OPTS = [
-    :root_path,
-    :relative_path
-  ]
+  REQUIRED_OPTS = [:relative_path, :root_path]
 
   let(:opts) { REQUIRED_OPTS.reduce({}) { |memo, opt| memo[opt] = nil; memo } }
 
   REQUIRED_OPTS.each do |key|
     it %{must be passed a "#{key}"} do
-      expect { subject.configure(opts.without(key)) }.to raise_error
+      expect { subject.configure(opts.without(key)) }.to raise_error KeyError
     end
   end
 
@@ -26,7 +23,7 @@ describe Foundry::Configurator do
       with_parser do |parser|
         expect(source).to receive(:load)
         expect(parser).to receive(:parse).and_call_original
-        expect { subject.configure(opts) }.to raise_error
+        expect { subject.configure(opts) }.to raise_error ZeroDivision
       end
     end
   end
@@ -35,7 +32,7 @@ describe Foundry::Configurator do
     with_source do |source|
       expect(source).to receive(:load) { 'foo: <%= 1/0 %>' }
       expect(template_engine).to receive(:evaluate).and_call_original
-      expect { subject.configure(opts) }.to raise_error
+      expect { subject.configure(opts) }.to raise_error ZeroDivision
     end
   end
 

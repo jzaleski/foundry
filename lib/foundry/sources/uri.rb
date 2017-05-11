@@ -2,6 +2,7 @@ require 'net/http'
 require 'openssl'
 require 'uri'
 
+
 module Foundry
   module Sources
     class URI
@@ -17,7 +18,8 @@ module Foundry
           request.basic_auth(username, password)
         end
         response = client.request(request)
-        raise "Unknown configuration file: #{uri}" unless response.is_a?(Net::HTTPSuccess)
+        raise "Unknown configuration file: #{uri}" \
+          unless response.is_a?(Net::HTTPSuccess)
         response.body
       end
     end

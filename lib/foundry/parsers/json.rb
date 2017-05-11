@@ -1,5 +1,6 @@
 require 'json'
 
+
 module Foundry
   module Parsers
     class JSON

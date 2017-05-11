@@ -7,6 +7,6 @@ describe Foundry::Sources::File do
   end
 
   it 'will raise an error if the file does not exist' do
-    expect { subject.load('', '', {}) }.to raise_error
+    expect { subject.load('', '', {}) }.to raise_error Errno::EISDIR
   end
 end
