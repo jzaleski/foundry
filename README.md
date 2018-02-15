@@ -117,6 +117,10 @@ Inheritance support:
 #
 # <config inherit="file1.xml"><value2>value</value2></config>
 #
+# === file2.json.alt (functionally equivalent to the file above) ===
+#
+# <config><value2>value</value2><inherit>file1.xml</inherit></config>
+#
 # When using the YAML parser, the file contents would be as follows:
 #
 # === file1.yml ===

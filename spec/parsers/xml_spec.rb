@@ -6,6 +6,11 @@ describe Foundry::Parsers::XML do
       eq({ 'foo' => 'bar' })
   end
 
+  it 'will raise an error if the XML inheritance value is ambiguous' do
+    expect { subject.parse('<config inherit="biz"><foo>bar</foo><inherit>baz</inherit></config>') }.to \
+      raise_error KeyError
+  end
+
   it 'will raise an error if the XML is not in the correct format' do
     expect { subject.parse('<foo>bar</foo>') }.to raise_error ArgumentError
   end

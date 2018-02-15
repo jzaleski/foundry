@@ -11,6 +11,7 @@ if defined?(REXML::Document)
           result = {}
           root_node.children.each { |node| result[node.name] = node.text }
           inherit = root_node.attributes['inherit']
+          raise KeyError unless result['inherit'].nil? || inherit.nil?
           result['inherit'] = inherit unless inherit.nil?
           result
         end
